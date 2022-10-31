@@ -1,30 +1,86 @@
 <template>
-    <div class="question-2">
+    <div>
         <h1>Questão 2</h1>
-        <p>Dê um clique na Estrela dourado</p>
-        {{ $store.state.hit }} 
-
-        <button :class="{ active: isActive, noActive: isActive === false }">Próximo</button>
+        <p>Dê duplo clique na Estrela Azul</p>
+        <div class="imgs-stars">
+            <div class="img-star" v-for=" { url, alt, id } in stars" :key="id">
+                <img :src="url" :alt="alt" @dblclick="countClickeStarGolden(id)">
+            </div>
+        </div>
+        <footer :class="{ active: isActive, noActive: isActive === false }">
+            <p>Você obteve {{ $store.state.hits.length ? $store.state.hits[1].hit : 0}}  {{$store.state.hits.length && $store.state.hits[1].hit === 1 ? "ponto" : "pontos" }} de 5 tentativas</p>
+            <button @click="goNext">Próximo</button>
+        </footer>
     </div>
 </template>
 
 <script>
 export default {
-
+    created() {
+        this.randonStars()
+    },
     data() {
         return {
-
+            stars: [],
+            count: 0,
+            hit: 0,
             isActive: false
         }
     },
     methods: {
+        goNext() {
+            this.$router.push({ name: "questao-3" })
+        },
+        countClickeStarGolden(id) {
+            ++this.count;
+            if (this.isActive) {
+                console.log(this.$store.state.hits)
+                return
+            }
 
+            if (id === 1) {
+                ++this.hit
+                this.$store.commit("changeHits", { index: 1, question: 1, hit: this.hit })
+            }
+            if (this.count < 4) {
+                this.randonStars()
+                return
+            }
+
+
+            this.isActive = this.count >= 5 ? true : false
+        },
+        randonStars() {
+            this.stars = [
+                { id: 1, url: require("../assets/star-golden.png"), alt: "Estrela dourado" },
+                { id: 2, url: require("../assets/star-green.jpg"), alt: "Estrela verde" },
+                { id: 3, url: require("../assets/star-pink.jpg"), alt: "Estrela rosa" },
+                { id: 4, url: require("../assets/star-blue.jpg"), alt: "Estrela azul" }
+            ]
+
+            function render(array) {
+                let currentIndex = array.length, randomIndex;
+
+                while (currentIndex != 0) {
+
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    [array[currentIndex], array[randomIndex]] = [
+                        array[randomIndex], array[currentIndex]];
+                }
+
+                return array;
+            }
+
+            // Used like so
+            render(this.stars);
+        }
     }
 }
 </script>
 
-<style>
-.question-1 {}
+<style scoped>
 
 .imgs-stars {
     display: flex !important;
@@ -45,16 +101,25 @@ export default {
     cursor: pointer;
 }
 
-.active {
+button {
     outline: none;
     border: none;
     padding: 10px 15px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active {
     background-color: brown;
     color: white;
     border-radius: 5px;
-    margin-top: 20px;
-    display: inline-block;
-    cursor: pointer;
+    display: block;
+    width: 250px;
+    margin: 20px auto 0;
+    padding: 10px;
 }
 
 .noActive {

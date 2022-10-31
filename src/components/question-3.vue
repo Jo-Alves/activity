@@ -1,14 +1,14 @@
 <template>
-    <div class="question-1">
-        <h1>Questão 1</h1>
-        <p>Dê um clique na Estrela dourado</p>
+    <div class="question-2">
+        <h1>Questão 3</h1>
+        <p>Dê duplo clique na Estrela azul</p>
         <div class="imgs-stars">
             <div class="img-star" v-for=" { url, alt, id } in stars" :key="id">
-                <img :src="url" :alt="alt" @click="countClickeStarGolden(id)">
+                <img :src="url" :alt="alt" @dblclick="countClickeStarGolden(id)">
             </div>
         </div>
         <footer :class="{ active: isActive, noActive: isActive === false }">
-           <p>  Você obteve {{ $store.state.hits.length ? $store.state.hits[1].hit : 0}}  {{$store.state.hits.length && $store.state.hits[1].hit === 1 ? "ponto" : "pontos" }} de 5 tentativas</p>
+            <p>Você obteve {{ $store.state.hit }} de 5</p>
             <button @click="goNext">Próximo</button>
         </footer>
     </div>
@@ -27,25 +27,19 @@ export default {
             isActive: false
         }
     },
-    computed: {
-        changeEmoticon(){
-           return this.$store.state.hits.length && this.$store.state.hits[1].hit <3 ? require("../assets/cry.png") : require("../assets/happy.jpg")
-        },
-    },
-    methods: {       
+    methods: {
         goNext() {
-            this.$router.push({ name: "questao-2" })
+            this.$router.push({ name: "questao-3" })
         },
         countClickeStarGolden(id) {
             ++this.count;
-            if (this.isActive) {
-                console.log(this.$store.state.hits)
+            if (this.isActive)
                 return
-            }
 
-            if (id === 1) {
+            if (id === 4) {
                 ++this.hit
-                this.$store.commit("changeHits", { index: 0, question: 1, hit: this.hit })
+                this.$store.commit("changeHits", this.hit)
+                console.log(this.hit)
             }
             if (this.count < 4) {
                 this.randonStars()
@@ -118,7 +112,7 @@ button {
     cursor: pointer;
 }
 
-.active {
+.active {  
     background-color: brown;
     color: white;
     border-radius: 5px;

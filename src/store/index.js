@@ -2,11 +2,11 @@ import { createStore } from "vuex"
 
 export default createStore({
     state: {
-        hit: 0
+        hits: []
     },
     mutations: {
-        changeHits(state, payload){
-            state.hit = payload
+        changeHits(state, payload) {
+            state.hits[payload.index] = payload
         }
     }
 })
