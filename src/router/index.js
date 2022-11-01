@@ -3,6 +3,7 @@ import Welcome from "../components/Welcome.vue"
 import question1 from "../components/question-1.vue"
 import question2 from "../components/question-2.vue"
 import question3 from "../components/question-3.vue"
+import question3_example from "../components/question-3-example.vue"
 const routes = [
   {
     path: "/",
@@ -23,6 +24,11 @@ const routes = [
     path: '/questao-3',
     name: "questao-3",
     component: question3
+  },
+  {
+    path: '/questao-3-example',
+    name: "questao-3-example",
+    component: question3_example
   },
 ]
 

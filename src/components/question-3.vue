@@ -1,10 +1,50 @@
 <template>
-    <div class="question-2">
+    <div>
         <h1>Questão 3</h1>
-        <p>Dê duplo clique na Estrela azul</p>
-        <div class="imgs-stars">
-            <div class="img-star" v-for=" { url, alt, id } in stars" :key="id">
-                <img :src="url" :alt="alt" @dblclick="countClickeStarGolden(id)">
+        <p>Arraste as imagens de acordo com o nome de cada equipamento:</p>
+        <div class="container">
+            <div class="equipaments">
+                <div class="div-equip">
+                    <p>Monitor</p>
+                    <div class="equipament" id="monitor" @drop="drop($event)" @dragover="allowDrop($event)"></div>
+                </div>
+                <div class="div-equip">
+                   <p> Mouse</p>
+                    <div class="equipament" id="mouse" @drop="drop($event)" @dragover="allowDrop($event)"></div>
+                </div>
+                <div class="div-equip">
+                    <p>Teclado</p>
+                    <div class="equipament" id="teclado" @drop="drop($event)" @dragover="allowDrop($event)">
+                    </div>
+                </div>
+                <div class="div-equip">
+                    <p>Impressora</p>
+                    <div class="equipament" id="print" @drop="drop($event)" @dragover="allowDrop($event)">
+                    </div>
+                </div>
+                <div class="div-equip">
+                    <p>Gabinete</p>
+                    <div class="equipament" id="gabinete" @drop="drop($event)" @dragover="allowDrop($event)">
+                    </div>
+                </div>
+            </div>
+            <div class="imgs-equipament">
+                <div class="img" @dragstart="drag($event)">
+                    <img id="img-print" src="../assets/impressora.webp" draggable="true" alt="imagem de impressora" />
+                </div>
+                <div class="img" @dragstart="drag($event)">
+                    <img src="../assets/gabinete.webp" id="img-gabinete" alt="imagem de gabinete" draggable="true" />
+                </div>
+                <div class="img" @dragstart="drag($event)">
+                    <img id="img-monitor" src="../assets/monitor.jpg" alt="imagem de impressora" draggable="true" />
+                </div>
+                <div class="img" @dragstart="drag($event)">
+                    <img id="img-teclado" src="../assets/teclado.webp" alt="Imagem do teclado de um computador"
+                        draggable="true" />
+                </div>
+                <div class="img" @dragstart="drag($event)">
+                    <img id="img-mouse" src="../assets/mouse.jpg" alt="mouse do computador" draggable="true" />
+                </div>
             </div>
         </div>
         <footer :class="{ active: isActive, noActive: isActive === false }">
@@ -16,9 +56,6 @@
 
 <script>
 export default {
-    created() {
-        this.randonStars()
-    },
     data() {
         return {
             stars: [],
@@ -31,71 +68,77 @@ export default {
         goNext() {
             this.$router.push({ name: "questao-3" })
         },
-        countClickeStarGolden(id) {
-            ++this.count;
-            if (this.isActive)
-                return
-
-            if (id === 4) {
-                ++this.hit
-                this.$store.commit("changeHits", this.hit)
-                console.log(this.hit)
-            }
-            if (this.count < 4) {
-                this.randonStars()
-                return
-            }
-
-
-            this.isActive = this.count >= 5 ? true : false
+        allowDrop(ev) {
+            ev.preventDefault();
         },
-        randonStars() {
-            this.stars = [
-                { id: 1, url: require("../assets/star-golden.png"), alt: "Estrela dourado" },
-                { id: 2, url: require("../assets/star-green.jpg"), alt: "Estrela verde" },
-                { id: 3, url: require("../assets/star-pink.jpg"), alt: "Estrela rosa" },
-                { id: 4, url: require("../assets/star-blue.jpg"), alt: "Estrela azul" }
-            ]
 
-            function render(array) {
-                let currentIndex = array.length, randomIndex;
+        drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        },
 
-                while (currentIndex != 0) {
+        drop(ev) {
+            ev.preventDefault();
+            ++this.count
+            var data = ev.dataTransfer.getData("text");
+            ev.target.innerHTML = ""
+            console.log(this.count)
+            ev.target.appendChild(document.getElementById(data));
+            if (this.count === 5)
+                this.isActive = true
 
-                    randomIndex = Math.floor(Math.random() * currentIndex);
-                    currentIndex--;
-
-                    [array[currentIndex], array[randomIndex]] = [
-                        array[randomIndex], array[currentIndex]];
-                }
-
-                return array;
-            }
-
-            // Used like so
-            render(this.stars);
         }
     }
 }
 </script>
 
 <style scoped>
-.question-1 {}
-
-.imgs-stars {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: rgb(233, 226, 226);
+    width: 550px;
+    margin: 0 auto;
+    padding: 5px;
 }
 
-.img-star {
-    width: 100px;
-    height: 100px;
-    margin-left: 5px;
+.div-equip{
 }
 
-.img-star img {
+.div-equip p{
+    text-align: center;
+    display: inline-block;
+}
+.imgs-equipament {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.img {
+    width: 85px;
+    height: 85px;
+    margin-left: 15px;
+    margin-bottom: 20px;
+}
+
+.equipaments {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.equipament {
+    width: 87px;
+    height: 87px;
+    margin-left: 15px;
+    margin-bottom: 18px;
+    border: 1px solid;
+}
+
+img {
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -112,7 +155,7 @@ button {
     cursor: pointer;
 }
 
-.active {  
+.active {
     background-color: brown;
     color: white;
     border-radius: 5px;

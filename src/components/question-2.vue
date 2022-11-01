@@ -1,14 +1,17 @@
 <template>
     <div>
         <h1>Questão 2</h1>
-        <p>Dê duplo clique na Estrela Azul</p>
+        <p>Dê um duplo clique na Estrela azul</p>
         <div class="imgs-stars">
             <div class="img-star" v-for=" { url, alt, id } in stars" :key="id">
-                <img :src="url" :alt="alt" @dblclick="countClickeStarGolden(id)">
+                <img :src="url" :alt="alt" @dblclick="countClickeStarBlue(id)">
             </div>
         </div>
         <footer :class="{ active: isActive, noActive: isActive === false }">
-            <p>Você obteve {{ $store.state.hits.length ? $store.state.hits[1].hit : 0}}  {{$store.state.hits.length && $store.state.hits[1].hit === 1 ? "ponto" : "pontos" }} de 5 tentativas</p>
+            <div class="result">
+                <img :src="changeEmoticon" alt="" class="emoticon" />
+                <p> {{ showResult() }}</p>
+            </div>
             <button @click="goNext">Próximo</button>
         </footer>
     </div>
@@ -27,11 +30,22 @@ export default {
             isActive: false
         }
     },
+    computed: {
+        changeEmoticon() {
+            return this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
+        },
+    },
     methods: {
+        showResult() {
+            if (this.isActive)
+                return `${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.$store.state.hits.length > 0 ?
+                    this.$store.state.hits[1].hit : 0}
+                ${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
+        },
         goNext() {
             this.$router.push({ name: "questao-3" })
         },
-        countClickeStarGolden(id) {
+        countClickeStarBlue(id) {
             ++this.count;
             if (this.isActive) {
                 console.log(this.$store.state.hits)
@@ -40,7 +54,7 @@ export default {
 
             if (id === 1) {
                 ++this.hit
-                this.$store.commit("changeHits", { index: 1, question: 1, hit: this.hit })
+                this.$store.commit("changeHits", { index: 1, question: 2, hit: this.hit })
             }
             if (this.count < 4) {
                 this.randonStars()
@@ -81,6 +95,12 @@ export default {
 </script>
 
 <style scoped>
+.emoticon {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    padding: 10px;
+}
 
 .imgs-stars {
     display: flex !important;
@@ -117,12 +137,18 @@ button {
     color: white;
     border-radius: 5px;
     display: block;
-    width: 250px;
+    width: 450px;
     margin: 20px auto 0;
     padding: 10px;
 }
 
 .noActive {
     display: none;
+}
+
+.result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 </style>

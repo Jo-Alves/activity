@@ -8,7 +8,10 @@
             </div>
         </div>
         <footer :class="{ active: isActive, noActive: isActive === false }">
-           <p>  Você obteve {{ $store.state.hits.length ? $store.state.hits[1].hit : 0}}  {{$store.state.hits.length && $store.state.hits[1].hit === 1 ? "ponto" : "pontos" }} de 5 tentativas</p>
+            <div class="result">
+                <img :src="changeEmoticon" alt="" class="emoticon" />
+                <p> {{ showResult }}</p>
+            </div>
             <button @click="goNext">Próximo</button>
         </footer>
     </div>
@@ -28,11 +31,16 @@ export default {
         }
     },
     computed: {
-        changeEmoticon(){
-           return this.$store.state.hits.length && this.$store.state.hits[1].hit <3 ? require("../assets/cry.png") : require("../assets/happy.jpg")
+        showResult() {
+            return `${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.$store.state.hits.length > 0 ?
+                this.$store.state.hits[0].hit : 0}
+                ${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
+        },
+        changeEmoticon() {
+            return this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
         },
     },
-    methods: {       
+    methods: {
         goNext() {
             this.$router.push({ name: "questao-2" })
         },
@@ -86,7 +94,12 @@ export default {
 </script>
 
 <style scoped>
-.question-1 {}
+.emoticon {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    padding: 10px;
+}
 
 .imgs-stars {
     display: flex !important;
@@ -123,12 +136,18 @@ button {
     color: white;
     border-radius: 5px;
     display: block;
-    width: 250px;
+    width: 450px;
     margin: 20px auto 0;
     padding: 10px;
 }
 
 .noActive {
     display: none;
+}
+
+.result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 </style>
