@@ -1,125 +1,58 @@
 <template>
     <div>
-        <h1>Questão 4</h1>
-        <p @select="selected($event)">Select</p>
-        palavra
-        <footer :class="{ active: isActive, noActive: isActive === false }">
-            <div class="result">
-                <img :src="changeEmoticon" alt="" class="emoticon" />
-                <p> {{ showResult() }}</p>
-            </div>
-            <button @click="goNext">Próximo</button>
-        </footer>
+        <h1>Resultado Final</h1>
+        {{ showResult }}
+        <div>
+            <img :src="changeEmoticon" alt="emoticon">
+        </div>
+        <button @click="goBack">Refazer o exercício</button>
+
     </div>
 </template>
 
 <script>
 export default {
+    created() {
+        this.calculateAverage();
+    },
     data() {
         return {
             stars: [],
             count: 0,
             hit: 0,
-            isActive: false
+            isActive: false,
+            average: 0
         }
     },
     computed: {
         changeEmoticon() {
-            return this.hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
+            return this.average >= 60 ? require("../assets/happy.jpg") : require("../assets/cry.png")
+        },
+        showResult() {
+            return `${this.average >= 60 ? `Parabéns, você obteve a média de ${this.average}%` : `Que pena, você só obteve a média de ${this.average}%`}`
         },
     },
     methods: {
-        selected(e){
-            console.log(e)
-        },
-        goNext() {
-            this.$router.push({ name: "questao-3" })
-        },
-        showResult() {
-            if (this.isActive)
-                return `${this.hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.hit}
-                ${this.hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
-        },
-        allowDrop(ev) {
-            ev.preventDefault();
-        },
+        calculateAverage() {
+            this.$store.state.hits.forEach(({ hit }) => {
+                this.hit += hit
+            })
 
-        drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
+            this.average = ((this.hit * 100) / 15).toFixed(2);
         },
-
-        drop(ev) {
-            ev.preventDefault();
-            ++this.count
-            var data = ev.dataTransfer.getData("text");
-            ev.target.innerHTML = ""
-            console.log(ev.target.draggable)
-            console.log(data.split("-")[1])
-            ev.target.appendChild(document.getElementById(data));
-            if (ev.target.id === data.split("-")[1]) {
-                ++this.hit
-                this.$store.commit("changeHits", { index: 2, question: 3, hit: this.hit })
-                console.log(this.$store.state.hits)
-            }
-
-            if (this.count === 5)
-                this.isActive = true
-
-        }
+        goBack() {
+            this.$store.commit("deleteEvaluation")
+            this.$router.push({ name: "questao-1" })
+        },
     }
 }
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    background-color: rgb(233, 226, 226);
-    width: 550px;
-    margin: 0 auto;
-    padding: 5px;
-}
-
-.div-equip {}
-
-.div-equip p {
-    text-align: center;
-    display: inline-block;
-}
-
-.imgs-equipament {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.img {
-    width: 85px;
-    height: 85px;
-    margin-left: 15px;
-    margin-bottom: 20px;
-}
-
-.equipaments {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.equipament {
-    width: 87px;
-    height: 87px;
-    margin-left: 15px;
-    margin-bottom: 18px;
-    border: 1px solid;
-}
 
 img {
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
     cursor: pointer;
 }
 
@@ -127,11 +60,12 @@ button {
     outline: none;
     border: none;
     padding: 10px 15px;
-    background-color: green;
+    background-color: #42b983;
     color: white;
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 .active {
@@ -143,6 +77,7 @@ button {
     margin: 20px auto 0;
     padding: 10px;
 }
+
 .noActive {
     display: none;
 }
@@ -153,10 +88,10 @@ button {
     border-radius: 100%;
     padding: 10px;
 }
+
 .result {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
-
 </style>

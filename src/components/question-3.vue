@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         goNext() {
-            this.$router.push({ name: "questao-4" })
+            this.$router.push({ name: "result" })
         },
         showResult() {
             if (this.isActive)
@@ -165,7 +165,7 @@ button {
     outline: none;
     border: none;
     padding: 10px 15px;
-    background-color: green;
+    background-color: #42b983;
     color: white;
     border-radius: 5px;
     display: inline-block;

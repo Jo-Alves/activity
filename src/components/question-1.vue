@@ -47,7 +47,6 @@ export default {
         countClickeStarGolden(id) {
             ++this.count;
             if (this.isActive) {
-                console.log(this.$store.state.hits)
                 return
             }
 
@@ -124,7 +123,7 @@ button {
     outline: none;
     border: none;
     padding: 10px 15px;
-    background-color: green;
+    background-color: #42b983;
     color: white;
     border-radius: 5px;
     display: inline-block;

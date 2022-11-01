@@ -4,9 +4,15 @@ import question1 from "../components/question-1.vue"
 import question2 from "../components/question-2.vue"
 import question3 from "../components/question-3.vue"
 import question4 from "../components/question-4.vue"
+import firstName from "../components/FirstName.vue"
 const routes = [
   {
     path: "/",
+    name: "FirstName",
+    component: firstName
+  },
+  {
+    path: "/welcome",
     name: "welcome",
     component: Welcome
   },
@@ -26,8 +32,8 @@ const routes = [
     component: question3
   },
   {
-    path: '/questao-4',
-    name: "questao-4",
+    path: '/result',
+    name: "result",
     component: question4
   },
 ]
