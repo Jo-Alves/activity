@@ -10,7 +10,7 @@
         <footer :class="{ active: isActive, noActive: isActive === false }">
             <div class="result">
                 <img :src="changeEmoticon" alt="" class="emoticon" />
-                <p> {{ showResult }}</p>
+                <p> {{ showResult() }}</p>
             </div>
             <button @click="goNext">Próximo</button>
         </footer>
@@ -31,18 +31,18 @@ export default {
         }
     },
     computed: {
-        showResult() {
-            return `${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.$store.state.hits.length > 0 ?
-                this.$store.state.hits[0].hit : 0}
-                ${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
-        },
         changeEmoticon() {
-            return this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
+            return this.hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
         },
     },
     methods: {
         goNext() {
             this.$router.push({ name: "questao-2" })
+        },
+        showResult() {
+            if (this.isActive)
+                return `${this.hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.hit}
+                ${this.hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
         },
         countClickeStarGolden(id) {
             ++this.count;

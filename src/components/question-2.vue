@@ -32,15 +32,14 @@ export default {
     },
     computed: {
         changeEmoticon() {
-            return this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
+            return this.hit >= 3 ? require("../assets/happy.jpg") : require("../assets/cry.png")
         },
     },
     methods: {
         showResult() {
             if (this.isActive)
-                return `${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.$store.state.hits.length > 0 ?
-                    this.$store.state.hits[1].hit : 0}
-                ${this.$store.state.hits.length > 0 && this.$store.state.hits[0].hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
+                return `${this.hit >= 3 ? "Parabéns, você obteve" : "Que pena, você só obteve"} ${this.hit}
+                ${this.hit === 1 ? "ponto" : "pontos"} de 5 tentativas`
         },
         goNext() {
             this.$router.push({ name: "questao-3" })

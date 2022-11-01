@@ -1,52 +1,8 @@
 <template>
     <div>
-        <h1>Questão 3</h1>
-        <p>Arraste as imagens de acordo com o nome de cada equipamento:</p>
-        <div class="container">
-            <div class="equipaments">
-                <div class="div-equip">
-                    <p>Monitor</p>
-                    <div class="equipament" id="monitor" @drop="drop($event)" @dragover="allowDrop($event)"></div>
-                </div>
-                <div class="div-equip">
-                    <p> Mouse</p>
-                    <div class="equipament" id="mouse" @drop="drop($event)" @dragover="allowDrop($event)"></div>
-                </div>
-                <div class="div-equip">
-                    <p>Teclado</p>
-                    <div class="equipament" id="teclado" @drop="drop($event)" @dragover="allowDrop($event)">
-                    </div>
-                </div>
-                <div class="div-equip">
-                    <p>Impressora</p>
-                    <div class="equipament" id="print" @drop="drop($event)" @dragover="allowDrop($event)">
-                    </div>
-                </div>
-                <div class="div-equip">
-                    <p>Gabinete</p>
-                    <div class="equipament" id="gabinete" @drop="drop($event)" @dragover="allowDrop($event)">
-                    </div>
-                </div>
-            </div>
-            <div class="imgs-equipament">
-                <div class="img" @dragstart="drag($event)">
-                    <img id="img-print" src="../assets/impressora.webp" draggable="true" alt="imagem de impressora" />
-                </div>
-                <div class="img" @dragstart="drag($event)">
-                    <img src="../assets/gabinete.webp" id="img-gabinete" alt="imagem de gabinete" draggable="true" />
-                </div>
-                <div class="img" @dragstart="drag($event)">
-                    <img id="img-monitor" src="../assets/monitor.jpg" alt="imagem de impressora" draggable="true" />
-                </div>
-                <div class="img" @dragstart="drag($event)">
-                    <img id="img-teclado" src="../assets/teclado.webp" alt="Imagem do teclado de um computador"
-                        draggable="true" />
-                </div>
-                <div class="img" @dragstart="drag($event)">
-                    <img id="img-mouse" src="../assets/mouse.jpg" alt="mouse do computador" draggable="true" />
-                </div>
-            </div>
-        </div>
+        <h1>Questão 4</h1>
+        <p @select="selected($event)">Select</p>
+        palavra
         <footer :class="{ active: isActive, noActive: isActive === false }">
             <div class="result">
                 <img :src="changeEmoticon" alt="" class="emoticon" />
@@ -73,8 +29,11 @@ export default {
         },
     },
     methods: {
+        selected(e){
+            console.log(e)
+        },
         goNext() {
-            this.$router.push({ name: "questao-4" })
+            this.$router.push({ name: "questao-3" })
         },
         showResult() {
             if (this.isActive)
@@ -94,10 +53,13 @@ export default {
             ++this.count
             var data = ev.dataTransfer.getData("text");
             ev.target.innerHTML = ""
+            console.log(ev.target.draggable)
+            console.log(data.split("-")[1])
             ev.target.appendChild(document.getElementById(data));
             if (ev.target.id === data.split("-")[1]) {
                 ++this.hit
                 this.$store.commit("changeHits", { index: 2, question: 3, hit: this.hit })
+                console.log(this.$store.state.hits)
             }
 
             if (this.count === 5)

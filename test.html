@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <p onmouseup="getSelText()">Now try it out. Select part of this sentence with your mouse, then click get selection. The resulting text will appear in the box below:</p>
+    <input type="button" value="Get selection">
+    <form name=afor>
+        <textarea name="selectedtext"></textarea>
+    </form>
+    <script>
+        function getSelText() {
+            var txt = '';
+            if (window.getSelection) {
+                txt = window.getSelection();
+            }
+            else if (document.getSelection) {
+                txt = document.getSelection();
+            }
+            else if (document.selection) {
+                txt = document.selection.createRange().text;
+            }
+            else return;
+
+            document.afor.selectedtext.value = txt;
+        }
+    </script>
+</body>
+
+</html>
